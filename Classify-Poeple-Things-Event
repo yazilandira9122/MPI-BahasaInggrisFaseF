@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MPI Bahasa Inggris Class 11 SMK - Classifying People, Things, Places & Events</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                            dark: '#0f291e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #091a13;
+            color: #1e293b;
+        }
+
+        /* 16:9 Aspect Ratio Container Guard */
+        .app-viewport {
+            width: 100%;
+            max-width: 1280px;
+            aspect-ratio: 16 / 9;
+            max-height: 90vh;
+        }
+
+        @media (max-width: 1024px) {
+            .app-viewport {
+                aspect-ratio: auto;
+                max-height: none;
+                min-height: 100vh;
+            }
+        }
+
+        /* Smooth Screen Transitions */
+        .screen-view {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-out;
+            transform: scale(0.98);
+        }
+
+        .screen-view.active {
+            display: flex;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Flip Card Effect */
+        .flip-card {
+            perspective: 1000px;
+        }
+        .flip-card-inner {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card:hover .flip-card-inner, .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            backface-visibility: hidden;
+        }
+        .flip-card-back {
+            transform: rotateY(180deg);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #16a34a;
+            border-radius: 4px;
+        }
+
+        /* Print Styling for Certificate */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #certificate-print-area, #certificate-print-area * {
+                visibility: visible;
+            }
+            #certificate-print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 20px;
+                background: white !important;
+                border: none !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-2 md:p-4 bg-slate-950 overflow-x-hidden">
+
+    <!-- MAIN APP CONTAINER (16:9 Framework) -->
+    <main class="app-viewport relative bg-gradient-to-br from-brand-50 to-emerald-100 rounded-3xl shadow-2xl overflow-hidden border border-brand-200/50 flex flex-col justify-between">
+
+        <!-- GLOBAL HEADER / AUDIO CONTROLS -->
+        <header class="w-full bg-white/80 backdrop-blur-md border-b border-brand-100 px-6 py-3 flex justify-between items-center z-30 shrink-0">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl bg-brand-600 flex items-center justify-center text-white font-bold text-lg shadow-md shadow-brand-600/30">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-sm md:text-base text-brand-900 leading-tight">MPI ENGLISH XI SMK</h1>
+                    <p class="text-xs text-brand-700 font-medium">Classify People, Things, Places & Events</p>
+                </div>
+            </div>
+
+            <!-- Student Info Display & Sound Toggles -->
+            <div class="flex items-center space-x-3">
+                <div id="header-user-tag" class="hidden md:flex items-center space-x-2 bg-brand-100/70 border border-brand-200 px-3 py-1 rounded-full text-xs font-semibold text-brand-800">
+                    <i class="fa-solid fa-user-graduate text-brand-600"></i>
+                    <span id="student-display-name">Guest Student</span>
+                </div>
+
+                <div class="flex items-center space-x-2 bg-slate-100 p-1 rounded-full border border-slate-200">
+                    <button id="btn-audio-bgm" onclick="toggleBGM()" title="Toggle Background Music" class="w-8 h-8 rounded-full bg-white text-slate-600 hover:text-brand-600 flex items-center justify-center transition shadow-sm">
+                        <i class="fa-solid fa-music text-xs"></i>
+                    </button>
+                    <button id="btn-audio-sfx" onclick="toggleSFX()" title="Toggle Sound FX" class="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center transition shadow-sm">
+                        <i class="fa-solid fa-volume-high text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- CANVAS BODY: SCREEN CONTAINER -->
+        <div class="relative w-full flex-1 overflow-hidden">
+
+            <!-- 1. COVER / LOGIN SCREEN -->
+            <section id="screen-cover" class="screen-view active absolute inset-0 p-6 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 overflow-y-auto">
+                <div class="w-full md:w-1/2 space-y-5">
+                    <div class="inline-flex items-center space-x-2 bg-brand-200/60 text-brand-800 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                        <i class="fa-solid fa-book-bookmark"></i>
+                        <span>Fase F - Kurikulum Merdeka</span>
+                    </div>
+                    <h2 class="text-3xl md:text-5xl font-black text-brand-900 leading-tight">
+                        Mastering <span class="text-brand-600 underline decoration-brand-400 decoration-wavy">Classification</span> & Relative Clauses
+                    </h2>
+                    <p class="text-slate-600 text-sm md:text-base leading-relaxed">
+                        Media Pembelajaran Interaktif Bahasa Inggris Kelas XI SMK. Pelajari cara mengelompokkan kata (People, Things, Places, Events) dan menggunakan Relative Pronouns secara profesional!
+                    </p>
+                    <div class="grid grid-cols-2 gap-3 pt-2 text-xs font-bold text-slate-700">
+                        <div class="flex items-center space-x-2 bg-white/80 p-2.5 rounded-xl border border-brand-100">
+                            <i class="fa-solid fa-bullseye text-brand-600 text-base"></i>
+                            <span>CEFR Level A2/B1</span>
+                        </div>
+                        <div class="flex items-center space-x-2 bg-white/80 p-2.5 rounded-xl border border-brand-100">
+                            <i class="fa-solid fa-certificate text-brand-600 text-base"></i>
+                            <span>Sertifikat Digital</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Login Form Box -->
+                <div class="w-full md:w-5/12 bg-white/90 backdrop-blur-md p-6 md:p-8 rounded-3xl shadow-xl border border-brand-100 space-y-4">
+                    <div class="text-center space-y-1">
+                        <h3 class="text-xl font-extrabold text-slate-800">Selamat Datang!</h3>
+                        <p class="text-xs text-slate-500">Isi data identitas siswa untuk memulai</p>
+                    </div>
+
+                    <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">Nama Lengkap Siswa</label>
+                            <input type="text" id="input-name" required placeholder="Contoh: Ahmad Rizky" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-1">Kelas / Jurusan SMK</label>
+                            <input type="text" id="input-school" required placeholder="Contoh: XI Rekayasa Perangkat Lunak 1" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500 text-sm transition">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wide mb-2">Pilih Avatar</label>
+                            <div class="flex justify-between items-center gap-2">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="avatar" value="👨‍🎓" checked class="peer hidden">
+                                    <div class="w-12 h-12 rounded-xl border-2 border-slate-200 peer-checked:border-brand-600 peer-checked:bg-brand-50 flex items-center justify-center text-2xl transition">👨‍🎓</div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="avatar" value="👩‍🎓" class="peer hidden">
+                                    <div class="w-12 h-12 rounded-xl border-2 border-slate-200 peer-checked:border-brand-600 peer-checked:bg-brand-50 flex items-center justify-center text-2xl transition">👩‍🎓</div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="avatar" value="💻" class="peer hidden">
+                                    <div class="w-12 h-12 rounded-xl border-2 border-slate-200 peer-checked:border-brand-600 peer-checked:bg-brand-50 flex items-center justify-center text-2xl transition">💻</div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="avatar" value="🔧" class="peer hidden">
+                                    <div class="w-12 h-12 rounded-xl border-2 border-slate-200 peer-checked:border-brand-600 peer-checked:bg-brand-50 flex items-center justify-center text-2xl transition">🔧</div>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full py-3.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl shadow-lg shadow-brand-600/30 transition transform hover:-translate-y-0.5 flex items-center justify-center space-x-2">
+                            <span>Mulai Belajar Sekarang</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- 2. PANDUAN SCREEN -->
+            <section id="screen-guide" class="screen-view absolute inset-0 p-6 md:p-10 flex-col justify-between overflow-y-auto">
+                <div class="max-w-4xl mx-auto w-full space-y-6">
+                    <div class="text-center space-y-2">
+                        <span class="bg-brand-200 text-brand-800 text-xs font-bold px-3 py-1 rounded-full uppercase">User Guide</span>
+                        <h2 class="text-3xl font-extrabold text-slate-800">Panduan Penggunaan Media Pembelajaran</h2>
+                        <p class="text-slate-600 text-sm">Bacalah petunjuk di bawah ini untuk mengoptimalkan pengalaman belajar Anda.</p>
+                    </div>
+
+                    <div class="grid md:grid-cols-3 gap-4">
+                        <div class="bg-white p-5 rounded-2xl border border-brand-100 shadow-sm space-y-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-brand-600 flex items-center justify-center font-bold text-lg">1</div>
+                            <h3 class="font-bold text-slate-800">Eksplorasi Materi</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">Pelajari 10 slide interaktif dari konsep dasar klasifikasi hingga Relative Pronouns (who, which, where, when).</p>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-brand-100 shadow-sm space-y-3">
+                            <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-600 flex items-center justify-center font-bold text-lg">2</div>
+                            <h3 class="font-bold text-slate-800">Simulasi & Kuis</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">Uji pemahaman pada menu Simulasi Card Sorting dan kerjakan 10 soal Kuis evaluasi interaktif (Minimal skor 70).</p>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-brand-100 shadow-sm space-y-3">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-brand-600 flex items-center justify-center font-bold text-lg">3</div>
+                            <h3 class="font-bold text-slate-800">Cetak Sertifikat</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">Setelah lulus kuis, Anda dapat mengunduh dan mencetak Sertifikat Kelulusan resmi berbentuk file PDF.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-brand-800 text-white p-5 rounded-2xl flex items-center justify-between">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-solid fa-circle-info text-2xl text-brand-300"></i>
+                            <div class="text-xs">
+                                <p class="font-bold text-sm">Syarat Kelulusan Certificate</p>
+                                <p class="text-brand-200">Sertifikat akan terbuka otomatis apabila skor Kuis Evaluasi Anda mencapai minimal 70 dari 100 point.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center pt-4">
+                    <button onclick="navigateTo('screen-menu')" class="px-8 py-3 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl shadow-md transition flex items-center space-x-2">
+                        <span>Lanjut ke Menu Utama</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- 3. MAIN MENU SCREEN (7 Interactive Tiles) -->
+            <section id="screen-menu" class="screen-view absolute inset-0 p-6 md:p-8 flex-col justify-between overflow-y-auto">
+                <div class="text-center space-y-1 mb-4">
+                    <h2 class="text-2xl md:text-3xl font-extrabold text-slate-800">Menu Utama Pembelajaran</h2>
+                    <p class="text-xs md:text-sm text-slate-600">Pilih salah satu menu interaktif di bawah ini untuk memulai kegiatan belajar</p>
+                </div>
+
+                <!-- 7 Tiles Grid -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-5xl mx-auto w-full my-auto">
+                    <!-- Tile 1: Objectives -->
+                    <button onclick="navigateTo('screen-objectives')" class="group bg-white p-5 rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-xl transition transform hover:-translate-y-1 text-left flex flex-col justify-between h-36">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-100 text-brand-600 flex items-center justify-center text-xl group-hover:bg-brand-600 group-hover:text-white transition">
+                            <i class="fa-solid fa-bullseye"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-slate-800 text-sm group-hover:text-brand-600">Tujuan Pembelajaran</h3>
+                            <p class="text-[11px] text-slate-500">Capaian Pembelajaran CEFR A2/B1</p>
+                        </div>
+                    </button>
+
+                    <!-- Tile 2: Materials -->
+                    <button onclick="navigateTo('screen-materi')" class="group bg-white p-5 rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-xl transition transform hover:-translate-y-1 text-left flex flex-col justify-between h-36">
+                        <div class="w-10 h-10 rounded-xl bg-teal-100 text-teal-600 flex items-center justify-center text-xl group-hover:bg-teal-600 group-hover:text-white transition">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-slate-800 text-sm group-hover:text-teal-600">Materi Pembelajaran</h3>
+                            <p class="text-[11px] text-slate-500">10 Slide Eksplorasi Interaktif</p>
+                        </div>
+                    </button>
+
+                    <!-- Tile 3: Simulation -->
+                    <button onclick="navigateTo('screen-simulation')" class="group bg-white p-5 rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-xl transition transform hover:-translate-y-1 text-left flex flex-col justify-between h-36">
+                        <div class="w-10 h-10 rounded-xl bg-cyan-100 text-cyan-600 flex items-center justify-center text-xl group-hover:bg-cyan-600 group-hover:text-white transition">
+                            <i class="fa-solid fa-gamepad"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-slate-800 text-sm group-hover:text-cyan-600">Simulasi / Game</h3>
+                            <p class="text-[11px] text-slate-500">Live Drag & Drop Sorting</p>
+                        </div>
+                    </button>
+
+                    <!-- Tile 4: Quiz -->
+                    <button onclick="navigateTo('screen-quiz')" class="group bg-white p-5 rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-xl transition transform hover:-translate-y-1 text-left flex flex-col justify-between h-36">
+                        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl group-hover:bg-amber-600 group-hover:text-white transition">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-slate-800 text-sm group-hover:text-amber-600">Kuis Evaluasi</h3>
+                            <p class="text-[11px] text-slate-500">10 Soal Interaktif 5 Opsi</p>
+                        </div>
+                    </button>
+
+                    <!-- Tile 5: References -->
+                    <button onclick="navigateTo('screen-reference')" class="group bg-white p-5 rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-xl transition transform hover:-translate-y-1 text-left flex flex-col justify-between h-36">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center text-xl group-hover:bg-indigo-600 group-hover:text-white transition">
+                            <i class="fa-solid fa-bookmark"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-slate-800 text-sm group-hover:text-indigo-600">Referensi & Glosarium</h3>
+                            <p class="text-[11px] text-slate-500">Kosa Kata & Grammar Reference</p>
+                        </div>
+                    </button>
+
+                    <!-- Tile 6: Reflection -->
+                    <button onclick="navigateTo('screen-reflection')" class="group bg-white p-5 rounded-2xl border border-slate-200/80 hover:border-brand-500 hover:shadow-xl transition transform hover:-translate-y-1 text-left flex flex-col justify-between h-36">
+                        <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center text-xl group-hover:bg-purple-600 group-hover:text-white transition">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-slate-800 text-sm group-hover:text-purple-600">Refleksi Diri</h3>
+                            <p class="text-[11px] text-slate-500">Self-Assessment Jurnal</p>
+                        </div>
+                    </button>
+
+                    <!-- Tile 7: Certificate (Conditional Lock) -->
+                    <button onclick="openCertificateScreen()" class="col-span-2 group bg-gradient-to-r from-emerald-600 to-teal-700 text-white p-5 rounded-2xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 text-left flex items-center justify-between h-36 relative overflow-hidden">
+                        <div class="space-y-1 z-10">
+                            <div id="cert-lock-badge" class="inline-flex items-center space-x-1 bg-white/20 backdrop-blur-md px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                                <i class="fa-solid fa-lock text-amber-300"></i>
+                                <span>Terkunci (Syarat Min. Nilai 70)</span>
+                            </div>
+                            <h3 class="font-extrabold text-lg text-white">Sertifikat Kelulusan</h3>
+                            <p class="text-xs text-brand-100">Unduh & Cetak Sertifikat Resmi PDF Anda</p>
+                        </div>
+                        <div class="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-3xl text-amber-300 z-10">
+                            <i class="fa-solid fa-award"></i>
+                        </div>
+                    </button>
+                </div>
+            </section>
+
+            <!-- 4. OBJECTIVES SCREEN -->
+            <section id="screen-objectives" class="screen-view absolute inset-0 p-6 md:p-10 flex-col justify-between overflow-y-auto">
+                <div class="max-w-4xl mx-auto w-full space-y-6">
+                    <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+                        <div>
+                            <span class="text-xs font-bold text-brand-600 uppercase">Learning Objectives</span>
+                            <h2 class="text-2xl font-extrabold text-slate-800">Tujuan Pembelajaran (Fase F - SMK)</h2>
+                        </div>
+                        <button onclick="navigateTo('screen-menu')" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold transition">
+                            <i class="fa-solid fa-house mr-1"></i> Menu
+                        </button>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-white p-5 rounded-2xl border border-brand-100 shadow-sm space-y-3">
+                            <div class="flex items-center space-x-3 text-brand-600 font-bold">
+                                <i class="fa-solid fa-layer-group text-xl"></i>
+                                <span>Capaian 1: Categorization</span>
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Peserta didik mampu mengklasifikasikan kata benda dan konsep ke dalam 4 kategori utama (People, Things, Places, Events) secara akurat dalam konteks kehidupan sehari-hari dan dunia kerja SMK.
+                            </p>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-brand-100 shadow-sm space-y-3">
+                            <div class="flex items-center space-x-3 text-teal-600 font-bold">
+                                <i class="fa-solid fa-diagram-project text-xl"></i>
+                                <span>Capaian 2: Relative Pronouns</span>
+                            </div>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Peserta didik mampu mengoperasikan Relative Pronouns (<span class="font-semibold text-brand-700">who, which/that, where, when</span>) untuk menghubungkan klausa deskriptif pada masing-masing kategori.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="bg-emerald-50 border border-emerald-200 p-5 rounded-2xl">
+                        <h4 class="font-bold text-xs uppercase text-brand-800 tracking-wider mb-2">Target Proficiency Standard:</h4>
+                        <ul class="text-xs text-slate-700 space-y-1.5 list-disc list-inside">
+                            <li><strong>CEFR Level A2/B1:</strong> Able to describe workplace objects, staff roles, locations, and events using simple connected text.</li>
+                            <li><strong>Vocational Context:</strong> Mengaplikasikan istilah teknik, jasa, culinary, dan bisnis dalam deskripsi Bahasa Inggris.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="flex justify-between pt-4 max-w-4xl mx-auto w-full">
+                    <button onclick="navigateTo('screen-menu')" class="px-5 py-2.5 bg-slate-200 text-slate-700 font-bold rounded-xl text-xs">Kembali</button>
+                    <button onclick="navigateTo('screen-materi')" class="px-6 py-2.5 bg-brand-600 text-white font-bold rounded-xl text-xs flex items-center space-x-2">
+                        <span>Mulai Materi</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- 5. MATERI SCREEN (10 Interactive Slides) -->
+            <section id="screen-materi" class="screen-view absolute inset-0 p-4 md:p-8 flex-col justify-between overflow-y-auto">
+                <!-- Slide Header -->
+                <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+                    <div class="flex items-center space-x-3">
+                        <button onclick="navigateTo('screen-menu')" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 text-xs transition">
+                            <i class="fa-solid fa-house"></i>
+                        </button>
+                        <span id="slide-indicator" class="text-xs font-bold bg-brand-100 text-brand-800 px-2.5 py-1 rounded-full">Slide 1 / 10</span>
+                    </div>
+                    <div class="w-48 bg-slate-200 h-2 rounded-full overflow-hidden">
+                        <div id="slide-progress-bar" class="bg-brand-600 h-full transition-all duration-300" style="width: 10%;"></div>
+                    </div>
+                </div>
+
+                <!-- Slide Content View Container -->
+                <div id="slide-container" class="my-auto py-4">
+                    <!-- Dynamic Slide Injection -->
+                </div>
+
+                <!-- Slide Nav Controls -->
+                <div class="flex justify-between items-center pt-2">
+                    <button id="btn-prev-slide" onclick="changeSlide(-1)" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-xl text-xs transition flex items-center space-x-2">
+                        <i class="fa-solid fa-chevron-left"></i>
+                        <span>Sebelumnya</span>
+                    </button>
+                    
+                    <div class="flex space-x-1" id="slide-dots">
+                        <!-- Dots populated via JS -->
+                    </div>
+
+                    <button id="btn-next-slide" onclick="changeSlide(1)" class="px-5 py-2 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-xs transition flex items-center space-x-2">
+                        <span>Berikutnya</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </button>
+                </div>
+            </section>
+
+            <!-- 6. SIMULATION / MINI-GAME SCREEN -->
+            <section id="screen-simulation" class="screen-view absolute inset-0 p-4 md:p-8 flex-col justify-between overflow-y-auto">
+                <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+                    <div>
+                        <span class="text-xs font-bold text-cyan-600 uppercase">Interactive Simulation</span>
+                        <h2 class="text-xl font-extrabold text-slate-800">Card Sorting Game: Classification Challenge</h2>
+                    </div>
+                    <button onclick="navigateTo('screen-menu')" class="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold">
+                        <i class="fa-solid fa-house mr-1"></i> Menu
+                    </button>
+                </div>
+
+                <p class="text-xs text-slate-600 my-2">Klik item kata di bawah, lalu klik kotak Kategori yang sesuai!</p>
+
+                <!-- Draggable/Selectable Items -->
+                <div id="sim-word-bank" class="flex flex-wrap gap-2 p-4 bg-white/80 rounded-2xl border border-slate-200 min-h-[70px] items-center justify-center">
+                    <!-- Dynamic Words -->
+                </div>
+
+                <!-- 4 Category Drop Bins -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 my-3">
+                    <div onclick="dropSimCard('PEOPLE')" class="sim-bin bg-emerald-50 border-2 border-dashed border-emerald-300 rounded-2xl p-3 min-h-[140px] flex flex-col justify-start">
+                        <div class="flex items-center space-x-2 text-emerald-800 font-bold text-xs border-b border-emerald-200 pb-2 mb-2">
+                            <i class="fa-solid fa-users"></i>
+                            <span>PEOPLE</span>
+                        </div>
+                        <div id="bin-PEOPLE" class="flex flex-wrap gap-1"></div>
+                    </div>
+
+                    <div onclick="dropSimCard('THINGS')" class="sim-bin bg-blue-50 border-2 border-dashed border-blue-300 rounded-2xl p-3 min-h-[140px] flex flex-col justify-start">
+                        <div class="flex items-center space-x-2 text-blue-800 font-bold text-xs border-b border-blue-200 pb-2 mb-2">
+                            <i class="fa-solid fa-cube"></i>
+                            <span>THINGS</span>
+                        </div>
+                        <div id="bin-THINGS" class="flex flex-wrap gap-1"></div>
+                    </div>
+
+                    <div onclick="dropSimCard('PLACES')" class="sim-bin bg-amber-50 border-2 border-dashed border-amber-300 rounded-2xl p-3 min-h-[140px] flex flex-col justify-start">
+                        <div class="flex items-center space-x-2 text-amber-800 font-bold text-xs border-b border-amber-200 pb-2 mb-2">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <span>PLACES</span>
+                        </div>
+                        <div id="bin-PLACES" class="flex flex-wrap gap-1"></div>
+                    </div>
+
+                    <div onclick="dropSimCard('EVENTS')" class="sim-bin bg-purple-50 border-2 border-dashed border-purple-300 rounded-2xl p-3 min-h-[140px] flex flex-col justify-start">
+                        <div class="flex items-center space-x-2 text-purple-800 font-bold text-xs border-b border-purple-200 pb-2 mb-2">
+                            <i class="fa-solid fa-calendar-check"></i>
+                            <span>EVENTS</span>
+                        </div>
+                        <div id="bin-EVENTS" class="flex flex-wrap gap-1"></div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center pt-2">
+                    <button onclick="resetSimulation()" class="px-4 py-2 bg-slate-200 text-slate-700 font-bold rounded-xl text-xs">Reset Game</button>
+                    <div id="sim-score-feedback" class="text-xs font-bold text-brand-800"></div>
+                    <button onclick="checkSimulation()" class="px-6 py-2 bg-cyan-600 hover:bg-cyan-700 text-white font-bold rounded-xl text-xs transition shadow-md">Periksa Hasil</button>
+                </div>
+            </section>
+
+            <!-- 7. EVALUATION QUIZ SCREEN (10 Multi-Type Questions) -->
+            <section id="screen-quiz" class="screen-view absolute inset-0 p-4 md:p-8 flex-col justify-between overflow-y-auto">
+                <!-- Quiz Header -->
+                <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+                    <div>
+                        <span class="text-xs font-bold text-amber-600 uppercase">Evaluasi Competency Test</span>
+                        <h2 class="text-lg font-extrabold text-slate-800">Kuis Evaluasi Bahasa Inggris XI SMK</h2>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span id="quiz-timer" class="bg-amber-100 text-amber-900 px-3 py-1 rounded-full text-xs font-bold">
+                            <i class="fa-solid fa-clock mr-1"></i> Soal <span id="quiz-num-display">1</span> / 10
+                        </span>
+                        <button onclick="navigateTo('screen-menu')" class="px-3 py-1 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold">Menu</button>
+                    </div>
+                </div>
+
+                <!-- Quiz Body Container -->
+                <div id="quiz-body" class="my-auto py-2">
+                    <!-- Questions Rendered Here -->
+                </div>
+
+                <!-- Quiz Navigation / Action Bar -->
+                <div class="flex justify-between items-center border-t border-slate-200 pt-3">
+                    <button id="btn-quiz-prev" onclick="prevQuestion()" class="px-4 py-2 bg-slate-200 text-slate-700 font-bold rounded-xl text-xs">Sebelumnya</button>
+                    
+                    <button id="btn-quiz-next" onclick="nextQuestion()" class="px-6 py-2 bg-brand-600 text-white font-bold rounded-xl text-xs shadow-md">
+                        Berikutnya
+                    </button>
+                    <button id="btn-quiz-submit" onclick="submitQuiz()" class="hidden px-6 py-2 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-xl text-xs shadow-md">
+                        Selesaikan Kuis
+                    </button>
+                </div>
+            </section>
+
+            <!-- 8. QUIZ RESULT & AUTOMATIC EXPLANATION SCREEN -->
+            <section id="screen-quiz-result" class="screen-view absolute inset-0 p-6 md:p-8 flex-col justify-between overflow-y-auto">
+                <div class="max-w-4xl mx-auto w-full space-y-6">
+                    <!-- Score Card Header -->
+                    <div class="bg-white p-6 rounded-3xl shadow-md border border-brand-100 flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div class="space-y-2 text-center md:text-left">
+                            <span class="bg-brand-100 text-brand-800 text-xs font-bold px-3 py-1 rounded-full uppercase">Hasil Evaluasi</span>
+                            <h2 class="text-2xl font-black text-slate-800">Laporan Skor Kuis Anda</h2>
+                            <p id="result-status-text" class="text-xs text-slate-600">Selamat! Anda telah menyelesaikan seluruh soal evaluasi.</p>
+                        </div>
+
+                        <div class="flex items-center space-x-6 bg-brand-50 p-4 rounded-2xl border border-brand-200">
+                            <div class="text-center">
+                                <div id="final-score-val" class="text-4xl font-black text-brand-700">0</div>
+                                <div class="text-[10px] font-bold uppercase text-brand-900">Total Skor</div>
+                            </div>
+                            <div class="h-10 w-px bg-brand-200"></div>
+                            <div class="text-center">
+                                <div id="final-predicate-val" class="text-lg font-bold text-slate-800">E</div>
+                                <div class="text-[10px] font-bold uppercase text-slate-500">Predikat</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Automatic Discussion / Explanation Accordion -->
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                        <h3 class="font-extrabold text-slate-800 text-sm flex items-center space-x-2">
+                            <i class="fa-solid fa-list-check text-brand-600"></i>
+                            <span>Pembahasan Otomatis Kuis (Automatic Explanation)</span>
+                        </h3>
+
+                        <div id="quiz-explanation-list" class="space-y-3 max-h-64 overflow-y-auto pr-2">
+                            <!-- Injected explanations -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-between items-center pt-4 max-w-4xl mx-auto w-full">
+                    <button onclick="navigateTo('screen-menu')" class="px-5 py-2.5 bg-slate-200 text-slate-700 font-bold rounded-xl text-xs">Kembali ke Menu</button>
+                    <button id="btn-cert-from-result" onclick="openCertificateScreen()" class="px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-xs flex items-center space-x-2 shadow-lg">
+                        <i class="fa-solid fa-award"></i>
+                        <span>Lihat Sertifikat</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- 9. REFERENCE & GLOSSARY SCREEN -->
+            <section id="screen-reference" class="screen-view absolute inset-0 p-6 md:p-10 flex-col justify-between overflow-y-auto">
+                <div class="max-w-4xl mx-auto w-full space-y-5">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+                        <div>
+                            <span class="text-xs font-bold text-indigo-600 uppercase">Glosarium & Grammar Reference</span>
+                            <h2 class="text-2xl font-extrabold text-slate-800">Referensi Pembelajaran Bahasa Inggris</h2>
+                        </div>
+                        <button onclick="navigateTo('screen-menu')" class="px-3 py-1.5 bg-slate-100 text-slate-700 rounded-xl text-xs font-bold">Menu</button>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 space-y-3">
+                            <h3 class="font-bold text-xs uppercase text-indigo-700 tracking-wider">Vocational Glossary</h3>
+                            <ul class="text-xs space-y-2 text-slate-700 divide-y divide-slate-100">
+                                <li class="pt-1"><strong class="text-brand-800">Artisan:</strong> Pekerja terampil yang membuat kerajinan tangan.</li>
+                                <li class="pt-1"><strong class="text-brand-800">Venue:</strong> Tempat pelaksanaan acara/festival.</li>
+                                <li class="pt-1"><strong class="text-brand-800">Monument:</strong> Bangunan bersejarah ikonik.</li>
+                                <li class="pt-1"><strong class="text-brand-800">Fragile:</strong> Kata sifat untuk benda ringkih/mudah pecah.</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-2xl border border-slate-200 space-y-3">
+                            <h3 class="font-bold text-xs uppercase text-indigo-700 tracking-wider">Relative Pronouns Formula</h3>
+                            <div class="space-y-2 text-xs text-slate-700">
+                                <p class="bg-slate-50 p-2 rounded-lg"><strong>[Noun - Person]</strong> + <span class="text-brand-600 font-bold">WHO</span> + Verb / Clause</p>
+                                <p class="bg-slate-50 p-2 rounded-lg"><strong>[Noun - Thing]</strong> + <span class="text-brand-600 font-bold">WHICH / THAT</span> + Verb / Clause</p>
+                                <p class="bg-slate-50 p-2 rounded-lg"><strong>[Noun - Place]</strong> + <span class="text-brand-600 font-bold">WHERE</span> + Subject + Verb</p>
+                                <p class="bg-slate-50 p-2 rounded-lg"><strong>[Noun - Event]</strong> + <span class="text-brand-600 font-bold">WHEN</span> + Subject + Verb</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center pt-4">
+                    <button onclick="navigateTo('screen-menu')" class="px-6 py-2.5 bg-slate-200 text-slate-700 font-bold rounded-xl text-xs">Kembali ke Menu</button>
+                </div>
+            </section>
+
+            <!-- 10. SELF-REFLECTION SCREEN -->
+            <section id="screen-reflection" class="screen-view absolute inset-0 p-6 md:p-10 flex-col justify-between overflow-y-auto">
+                <div class="max-w-3xl mx-auto w-full space-y-5">
+                    <div class="text-center space-y-1">
+                        <span class="text-xs font-bold text-purple-600 uppercase">Self-Assessment</span>
+                        <h2 class="text-2xl font-extrabold text-slate-800">Refleksi Diri Pembelajaran</h2>
+                        <p class="text-xs text-slate-600">Seberapa jauh pemahaman Anda setelah mempelajari topik ini?</p>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                        <div class="space-y-2">
+                            <label class="block text-xs font-bold text-slate-700">1. Apakah Anda dapat membedakan People, Things, Places, dan Events?</label>
+                            <select id="refl-q1" class="w-full p-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-purple-500">
+                                <option>Sangat Paham (Dapat mengelompokkan dengan cepat)</option>
+                                <option>Cukup Paham (Masih butuh sedikit melihat glosarium)</option>
+                                <option>Belum Paham (Perlu mengulang materi)</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-xs font-bold text-slate-700">2. Seberapa percaya diri Anda menggunakan Relative Pronouns (Who, Which, Where, When)?</label>
+                            <select id="refl-q2" class="w-full p-2.5 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-purple-500">
+                                <option>Sangat Yakin (Dapat membuat kalimat sendiri)</option>
+                                <option>Ragu-ragu (Sering tertukar antara which dan where)</option>
+                                <option>Perlu Latihan Tambahan</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-xs font-bold text-slate-700">3. Catatan Ringkas / Kesan Belajar Anda:</label>
+                            <textarea id="refl-notes" rows="3" placeholder="Tuliskan pengalaman atau bagian materi paling menarik..." class="w-full p-3 rounded-xl border border-slate-200 text-xs focus:ring-2 focus:ring-purple-500"></textarea>
+                        </div>
+
+                        <button onclick="saveReflection()" class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-xs shadow-md transition">Simpan Refleksi Diri</button>
+                    </div>
+                </div>
+
+                <div class="flex justify-center pt-2">
+                    <button onclick="navigateTo('screen-menu')" class="px-6 py-2.5 bg-slate-200 text-slate-700 font-bold rounded-xl text-xs">Kembali ke Menu</button>
+                </div>
+            </section>
+
+            <!-- 11. PRINTABLE CERTIFICATE SCREEN -->
+            <section id="screen-certificate" class="screen-view absolute inset-0 p-4 md:p-8 flex-col justify-between overflow-y-auto">
+                <div class="flex justify-between items-center border-b border-slate-200 pb-3 no-print">
+                    <h2 class="text-xl font-extrabold text-slate-800">Sertifikat Kelulusan MPI</h2>
+                    <div class="space-x-2">
+                        <button onclick="navigateTo('screen-menu')" class="px-4 py-2 bg-slate-200 text-slate-700 rounded-xl text-xs font-bold">Menu</button>
+                        <button onclick="window.print()" class="px-5 py-2 bg-brand-600 text-white rounded-xl text-xs font-bold shadow-md hover:bg-brand-700 transition">
+                            <i class="fa-solid fa-print mr-1"></i> Cetak PDF
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Printable Certificate Framework -->
+                <div id="certificate-print-area" class="my-auto mx-auto w-full max-w-3xl bg-white p-8 md:p-12 rounded-3xl border-8 border-double border-brand-700 shadow-2xl text-center space-y-6 relative overflow-hidden">
+                    <!-- Elegant Background Watermark -->
+                    <div class="absolute inset-0 opacity-5 flex items-center justify-center pointer-events-none">
+                        <i class="fa-solid fa-award text-[280px] text-brand-900"></i>
+                    </div>
+
+                    <div class="space-y-2 relative z-10">
+                        <div class="inline-block bg-brand-100 text-brand-800 text-xs font-extrabold px-4 py-1 rounded-full uppercase tracking-widest">
+                            Certificate of Achievement
+                        </div>
+                        <h1 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">SERTIFIKAT KELULUSAN</h1>
+                        <p class="text-xs text-slate-500 uppercase tracking-widest font-bold">MPI BAHASA INGGRIS KELAS XI SMK</p>
+                    </div>
+
+                    <div class="space-y-1 relative z-10">
+                        <p class="text-xs text-slate-500 italic">Diberikan kepada siswa berprestasi:</p>
+                        <h2 id="cert-student-name" class="text-2xl md:text-3xl font-extrabold text-brand-700 underline underline-offset-8 decoration-amber-400">
+                            Nama Siswa
+                        </h2>
+                        <p id="cert-school-name" class="text-xs font-semibold text-slate-600">Kelas / Jurusan SMK</p>
+                    </div>
+
+                    <p class="text-xs text-slate-600 max-w-xl mx-auto leading-relaxed relative z-10">
+                        Atas keberhasilannya menguasai materi pembelajaran interaktif topik <strong>"Classifying People, Things, Places, and Events"</strong> serta penggunaan Relative Pronouns (<span class="italic font-bold">who, which, where, when</span>) dengan nilai evaluasi memuaskan.
+                    </p>
+
+                    <!-- Score Badge & Signatures -->
+                    <div class="grid grid-cols-2 gap-6 pt-4 border-t border-slate-200 relative z-10 max-w-md mx-auto">
+                        <div class="bg-brand-50 p-3 rounded-xl border border-brand-200">
+                            <span class="text-[10px] font-bold uppercase text-brand-800">Nilai Evaluasi</span>
+                            <div id="cert-score-display" class="text-2xl font-black text-brand-700">90 / 100</div>
+                        </div>
+                        <div class="bg-amber-50 p-3 rounded-xl border border-amber-200">
+                            <span class="text-[10px] font-bold uppercase text-amber-800">Status Kelulusan</span>
+                            <div id="cert-status-display" class="text-sm font-extrabold text-amber-700 mt-1">LULUS (EXCELLENT)</div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-end pt-8 text-left text-xs text-slate-500 relative z-10">
+                        <div>
+                            <p>Tanggal Akses: <span id="cert-date" class="font-bold text-slate-700"></span></p>
+                            <p>ID Verifikasi: <span class="font-mono text-[10px] text-slate-400">MPI-ENG11-SMK-2026</span></p>
+                        </div>
+                        <div class="text-center space-y-1">
+                            <div class="font-serif italic text-sm text-brand-900 font-bold border-b border-slate-400 pb-1">English Department SMK</div>
+                            <p class="text-[10px] uppercase font-bold text-slate-400">Guru Pengampu Bahasa Inggris</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div> <!-- END CANVAS BODY -->
+
+        <!-- GLOBAL FOOTER NAVIGATION -->
+        <footer class="w-full bg-white/70 backdrop-blur-md border-t border-brand-100 px-6 py-2.5 flex justify-between items-center text-xs text-slate-500 z-30 shrink-0">
+            <div>
+                <span>Media Pembelajaran Interaktif SMK &copy; 2026</span>
+            </div>
+            <div class="flex space-x-4">
+                <button onclick="navigateTo('screen-cover')" class="hover:text-brand-600 transition">Cover</button>
+                <button onclick="navigateTo('screen-guide')" class="hover:text-brand-600 transition">Panduan</button>
+                <button onclick="navigateTo('screen-menu')" class="hover:text-brand-600 transition font-bold text-brand-700">Menu Utama</button>
+            </div>
+        </footer>
+    </main>
+
+    <!-- SYSTEM AUDIO & APPS JAVASCRIPT LOGIC -->
+    <script>
+        /* ==========================================================================
+           1. GLOBAL APP STATE & USER DATA
+           ========================================================================== */
+        let studentData = {
+            name: "Siswa SMK",
+            school: "SMK Negeri 1",
+            avatar: "👨‍🎓"
+        };
+
+        let currentSlide = 0;
+        let quizScore = 0;
+        let isQuizPassed = false;
+        let userQuizAnswers = {};
+
+        /* ==========================================================================
+           2. WEB AUDIO API SYNTHESIZER (BGM & SFX WITHOUT EXTERNAL ASSETS)
+           ========================================================================== */
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+        let isBgmOn = false;
+        let isSfxOn = true;
+        let bgmOscillator = null;
+        let bgmGain = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new AudioCtx();
+            }
+        }
+
+        function playSound(type) {
+            if (!isSfxOn) return;
+            initAudio();
+            
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            const now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.exponentialRampToValueAtTime(200, now + 0.05);
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.05);
+                osc.start(now);
+                osc.stop(now + 0.05);
+            } else if (type === 'correct') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, now); // C5
+                osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+                osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.35);
+                osc.start(now);
+                osc.stop(now + 0.35);
+            } else if (type === 'error') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(180, now);
+                osc.frequency.setValueAtTime(140, now + 0.1);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.25);
+                osc.start(now);
+                osc.stop(now + 0.25);
+            }
+        }
+
+        function toggleBGM() {
+            initAudio();
+            isBgmOn = !isBgmOn;
+            const btn = document.getElementById('btn-audio-bgm');
+
+            if (isBgmOn) {
+                btn.classList.add('bg-brand-600', 'text-white');
+                btn.classList.remove('bg-white', 'text-slate-600');
+                startAmbientBgm();
+            } else {
+                btn.classList.remove('bg-brand-600', 'text-white');
+                btn.classList.add('bg-white', 'text-slate-600');
+                stopAmbientBgm();
+            }
+            playSound('click');
+        }
+
+        function toggleSFX() {
+            isSfxOn = !isSfxOn;
+            const btn = document.getElementById('btn-audio-sfx');
+            if (isSfxOn) {
+                btn.classList.add('bg-brand-600', 'text-white');
+                btn.classList.remove('bg-slate-300', 'text-slate-600');
+            } else {
+                btn.classList.remove('bg-brand-600', 'text-white');
+                btn.classList.add('bg-slate-300', 'text-slate-600');
+            }
+        }
+
+        function startAmbientBgm() {
+            if (bgmOscillator) return;
+            bgmOscillator = audioCtx.createOscillator();
+            bgmGain = audioCtx.createGain();
+            bgmOscillator.type = 'sine';
+            bgmOscillator.frequency.setValueAtTime(220, audioCtx.currentTime); // Low soft pitch
+            bgmGain.gain.setValueAtTime(0.02, audioCtx.currentTime); // Very quiet ambient
+            bgmOscillator.connect(bgmGain);
+            bgmGain.connect(audioCtx.destination);
+            bgmOscillator.start();
+        }
+
+        function stopAmbientBgm() {
+            if (bgmOscillator) {
+                bgmOscillator.stop();
+                bgmOscillator.disconnect();
+                bgmOscillator = null;
+            }
+        }
+
+        /* ==========================================================================
+           3. SCREEN NAVIGATION & LOGIN LOGIC
+           ========================================================================== */
+        function navigateTo(screenId) {
+            playSound('click');
+            const screens = document.querySelectorAll('.screen-view');
+            screens.forEach(s => s.classList.remove('active'));
+
+            const target = document.getElementById(screenId);
+            if (target) {
+                target.classList.add('active');
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const nameInput = document.getElementById('input-name').value.trim();
+            const schoolInput = document.getElementById('input-school').value.trim();
+            const avatarInput = document.querySelector('input[name="avatar"]:checked').value;
+
+            if (nameInput) studentData.name = nameInput;
+            if (schoolInput) studentData.school = schoolInput;
+            studentData.avatar = avatarInput;
+
+            // Update UI Displays
+            document.getElementById('student-display-name').innerText = `${studentData.avatar} ${studentData.name}`;
+            document.getElementById('header-user-tag').classList.remove('hidden');
+
+            navigateTo('screen-guide');
+        }
+
+        /* ==========================================================================
+           4. MATERI SLIDES DATA & RENDERER (10 Interactive Slides)
+           ========================================================================== */
+        const slidesData = [
+            {
+                title: "Slide 1: Introduction to Classification",
+                subtitle: "What is Classifying & Why it Matters",
+                content: `
+                    <div class="grid md:grid-cols-2 gap-6 items-center">
+                        <div class="space-y-3">
+                            <span class="bg-brand-200 text-brand-800 text-xs font-bold px-2.5 py-1 rounded-full">Basic Concept</span>
+                            <h3 class="text-2xl font-black text-slate-800">What is 'Classifying'?</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                <strong>Classifying</strong> means grouping items or concepts together based on shared features, types, or workplace characteristics.
+                            </p>
+                            <div class="bg-white p-3 rounded-xl border border-brand-200 shadow-sm space-y-1">
+                                <p class="text-xs font-bold text-brand-700">Mengapa penting untuk Siswa SMK?</p>
+                                <ul class="text-[11px] text-slate-600 space-y-1 list-disc list-inside">
+                                    <li>Membantu mengorganisasi ide saat menulis laporan/writing.</li>
+                                    <li>Memudahkan pemilihan kata deskriptif (Adjectives) saat berbicara (Speaking).</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="bg-white p-6 rounded-2xl border border-brand-100 flex flex-col items-center justify-center text-center space-y-3 shadow-md">
+                            <div class="w-16 h-16 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-3xl">
+                                <i class="fa-solid fa-shapes"></i>
+                            </div>
+                            <h4 class="font-bold text-slate-800 text-sm">4 Pillars of Classification</h4>
+                            <div class="grid grid-cols-2 gap-2 text-xs w-full">
+                                <span class="bg-emerald-50 text-emerald-700 p-2 rounded-lg font-bold">1. People</span>
+                                <span class="bg-blue-50 text-blue-700 p-2 rounded-lg font-bold">2. Things</span>
+                                <span class="bg-amber-50 text-amber-700 p-2 rounded-lg font-bold">3. Places</span>
+                                <span class="bg-purple-50 text-purple-700 p-2 rounded-lg font-bold">4. Events</span>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Slide 2: Category 1 - People",
+                subtitle: "Individuals, Professions & Roles",
+                content: `
+                    <div class="grid md:grid-cols-2 gap-6 items-center">
+                        <div class="space-y-3">
+                            <span class="bg-emerald-200 text-emerald-800 text-xs font-bold px-2.5 py-1 rounded-full">Category 1</span>
+                            <h3 class="text-2xl font-black text-slate-800">PEOPLE (Orang / Profesi)</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Refers to individuals, professions, team members, or social groups in vocational contexts.
+                            </p>
+                            <div class="space-y-2">
+                                <span class="text-xs font-bold text-slate-700">Example Nouns:</span>
+                                <div class="flex flex-wrap gap-1.5 text-xs">
+                                    <span class="bg-white px-2.5 py-1 rounded-lg border border-slate-200 font-semibold">Chef</span>
+                                    <span class="bg-white px-2.5 py-1 rounded-lg border border-slate-200 font-semibold">Technician</span>
+                                    <span class="bg-white px-2.5 py-1 rounded-lg border border-slate-200 font-semibold">Artisan</span>
+                                    <span class="bg-white px-2.5 py-1 rounded-lg border border-slate-200 font-semibold">Volunteer</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gradient-to-br from-emerald-600 to-teal-700 text-white p-6 rounded-2xl shadow-md space-y-3">
+                            <h4 class="font-bold text-sm">Matching Adjectives for People:</h4>
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                <div class="bg-white/10 p-2 rounded-lg"><strong>Hardworking:</strong> Rajin</div>
+                                <div class="bg-white/10 p-2 rounded-lg"><strong>Skilled:</strong> Terampil</div>
+                                <div class="bg-white/10 p-2 rounded-lg"><strong>Polite:</strong> Sopan</div>
+                                <div class="bg-white/10 p-2 rounded-lg"><strong>Reliable:</strong> Handal</div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Slide 3: Category 2 - Things",
+                subtitle: "Objects, Tools & Equipment",
+                content: `
+                    <div class="grid md:grid-cols-2 gap-6 items-center">
+                        <div class="space-y-3">
+                            <span class="bg-blue-200 text-blue-800 text-xs font-bold px-2.5 py-1 rounded-full">Category 2</span>
+                            <h3 class="text-2xl font-black text-slate-800">THINGS (Benda / Alat)</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Objects, machinery, digital devices, handmade crafts, or non-living tools used in vocational tasks.
+                            </p>
+                            <div class="space-y-2">
+                                <span class="text-xs font-bold text-slate-700">Example Nouns:</span>
+                                <div class="flex flex-wrap gap-1.5 text-xs">
+                                    <span class="bg-white px-2.5 py-1 rounded-lg border border-slate-200 font-semibold">Smartphone</span>
+                                    <span class="bg-white px-2.5 py-1 rounded-lg border border-slate-200 font-semibold">Machinery</span>
+                                    <span class="bg-white px-2.5 py-1 rounded-lg border border-slate-200 font-semibold">Souvenir</span>
+                                    <span class="bg-white px-2.5 py-1 rounded-lg border border-slate-200 font-semibold">Craft</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gradient-to-br from-blue-600 to-cyan-700 text-white p-6 rounded-2xl shadow-md space-y-3">
+                            <h4 class="font-bold text-sm">Matching Adjectives for Things:</h4>
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                <div class="bg-white/10 p-2 rounded-lg"><strong>Fragile:</strong> Mudah pecah</div>
+                                <div class="bg-white/10 p-2 rounded-lg"><strong>Durable:</strong> Tahan lama</div>
+                                <div class="bg-white/10 p-2 rounded-lg"><strong>Useful:</strong> Berguna</div>
+                                <div class="bg-white/10 p-2 rounded-lg"><strong>High-tech:</strong> Canggih</div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Slide 4: Category 3 - Places",
+                subtitle: "Locations, Buildings & Venues",
+                content: `
+                    <div class="grid md:grid-cols-2 gap-6 items-center">
+                        <div class="space-y-3">
+                            <span class="bg-amber-200 text-amber-800 text-xs font-bold px-2.5 py-1 rounded-full">Category 3</span>
+                            <h3 class="text-2xl font-black text-slate-800">PLACES (Tempat / Lokasi)</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Geographical areas, industrial workshops, historic venues, or buildings where activities occur.
+                            </p>
+                            <div class="space-y-2">
+                                <span class="text-xs font-bold text-slate-700">Example Nouns:</span>
+                                <div class="flex flex-wrap gap-1.5 text-xs">
+                                    <span class="bg-white px-2.5 py-1 rounded-lg border border-slate-200 font-semibold">Workshop</span>
+                                    <span class="bg-white px-2.5 py-1 rounded-lg border border-slate-200 font-semibold">Museum</span>
+                                    <span class="bg-white px-2.5 py-1 rounded-lg border border-slate-200 font-semibold">Town Square</span>
+                                    <span class="bg-white px-2.5 py-1 rounded-lg border border-slate-200 font-semibold">Venue</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gradient-to-br from-amber-600 to-orange-700 text-white p-6 rounded-2xl shadow-md space-y-3">
+                            <h4 class="font-bold text-sm">Matching Adjectives for Places:</h4>
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                <div class="bg-white/10 p-2 rounded-lg"><strong>Spacious:</strong> Luas</div>
+                                <div class="bg-white/10 p-2 rounded-lg"><strong>Historic:</strong> Bersejarah</div>
+                                <div class="bg-white/10 p-2 rounded-lg"><strong>Crowded:</strong> Ramai</div>
+                                <div class="bg-white/10 p-2 rounded-lg"><strong>Scenic:</strong> Indah</div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Slide 5: Category 4 - Events",
+                subtitle: "Occurrences & Celebrations",
+                content: `
+                    <div class="grid md:grid-cols-2 gap-6 items-center">
+                        <div class="space-y-3">
+                            <span class="bg-purple-200 text-purple-800 text-xs font-bold px-2.5 py-1 rounded-full">Category 4</span>
+                            <h3 class="text-2xl font-black text-slate-800">EVENTS (Acara / Kejadian)</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Special occasions, cultural festivals, exhibitions, or scheduled activities over a time frame.
+                            </p>
+                            <div class="space-y-2">
+                                <span class="text-xs font-bold text-slate-700">Example Nouns:</span>
+                                <div class="flex flex-wrap gap-1.5 text-xs">
+                                    <span class="bg-white px-2.5 py-1 rounded-lg border border-slate-200 font-semibold">Festival</span>
+                                    <span class="bg-white px-2.5 py-1 rounded-lg border border-slate-200 font-semibold">Exhibition</span>
+                                    <span class="bg-white px-2.5 py-1 rounded-lg border border-slate-200 font-semibold">Ceremony</span>
+                                    <span class="bg-white px-2.5 py-1 rounded-lg border border-slate-200 font-semibold">Concert</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-gradient-to-br from-purple-600 to-indigo-700 text-white p-6 rounded-2xl shadow-md space-y-3">
+                            <h4 class="font-bold text-sm">Matching Adjectives for Events:</h4>
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                <div class="bg-white/10 p-2 rounded-lg"><strong>Memorable:</strong> Berkesan</div>
+                                <div class="bg-white/10 p-2 rounded-lg"><strong>Lively:</strong> Meriah</div>
+                                <div class="bg-white/10 p-2 rounded-lg"><strong>Formal:</strong> Resmi</div>
+                                <div class="bg-white/10 p-2 rounded-lg"><strong>Annual:</strong> Tahunan</div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Slide 6: Relative Pronouns Part 1",
+                subtitle: "WHO (People) & WHICH/THAT (Things)",
+                content: `
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-black text-slate-800">Connecting Categories with Relative Pronouns</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <!-- WHO Card -->
+                            <div class="bg-white p-5 rounded-2xl border-l-4 border-emerald-500 shadow-sm space-y-2">
+                                <div class="flex items-center space-x-2 text-emerald-700 font-bold">
+                                    <i class="fa-solid fa-user"></i>
+                                    <span>WHO → Used for PEOPLE</span>
+                                </div>
+                                <p class="text-xs text-slate-600">Menghubungkan orang dengan profesi/tindakannya.</p>
+                                <div class="bg-emerald-50 p-2.5 rounded-xl text-xs text-emerald-900 font-medium">
+                                    "A chef is a person <span class="font-bold underline decoration-emerald-500">WHO</span> cooks delicious authentic dishes."
+                                </div>
+                            </div>
+
+                            <!-- WHICH Card -->
+                            <div class="bg-white p-5 rounded-2xl border-l-4 border-blue-500 shadow-sm space-y-2">
+                                <div class="flex items-center space-x-2 text-blue-700 font-bold">
+                                    <i class="fa-solid fa-cube"></i>
+                                    <span>WHICH / THAT → Used for THINGS</span>
+                                </div>
+                                <p class="text-xs text-slate-600">Menghubungkan benda/alat dengan fungsinya.</p>
+                                <div class="bg-blue-50 p-2.5 rounded-xl text-xs text-blue-900 font-medium">
+                                    "A smartphone is a device <span class="font-bold underline decoration-blue-500">WHICH</span> connects to the internet."
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Slide 7: Relative Pronouns Part 2",
+                subtitle: "WHERE (Places) & WHEN (Events)",
+                content: `
+                    <div class="space-y-4">
+                        <h3 class="text-xl font-black text-slate-800">Connecting Locations & Time</h3>
+                        <div class="grid md:grid-cols-2 gap-4">
+                            <!-- WHERE Card -->
+                            <div class="bg-white p-5 rounded-2xl border-l-4 border-amber-500 shadow-sm space-y-2">
+                                <div class="flex items-center space-x-2 text-amber-700 font-bold">
+                                    <i class="fa-solid fa-map-pin"></i>
+                                    <span>WHERE → Used for PLACES</span>
+                                </div>
+                                <p class="text-xs text-slate-600">Menunjuk lokasi terjadinya suatu kegiatan.</p>
+                                <div class="bg-amber-50 p-2.5 rounded-xl text-xs text-amber-900 font-medium">
+                                    "A museum is a place <span class="font-bold underline decoration-amber-500">WHERE</span> historical items are displayed."
+                                </div>
+                            </div>
+
+                            <!-- WHEN Card -->
+                            <div class="bg-white p-5 rounded-2xl border-l-4 border-purple-500 shadow-sm space-y-2">
+                                <div class="flex items-center space-x-2 text-purple-700 font-bold">
+                                    <i class="fa-solid fa-clock"></i>
+                                    <span>WHEN → Used for EVENTS</span>
+                                </div>
+                                <p class="text-xs text-slate-600">Menunjuk waktu/momen berlangsungnya event.</p>
+                                <div class="bg-purple-50 p-2.5 rounded-xl text-xs text-purple-900 font-medium">
+                                    "New Year's Eve is an event <span class="font-bold underline decoration-purple-500">WHEN</span> people celebrate the start of a year."
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Slide 8: Reading Comprehension Text",
+                subtitle: "Cultural Festivals: Bringing Communities Together",
+                content: `
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3 max-h-[280px] overflow-y-auto">
+                        <div class="flex items-center justify-between border-b pb-2">
+                            <h4 class="font-bold text-slate-800 text-sm">Reading Text (LKPD Context)</h4>
+                            <span class="text-[10px] bg-brand-100 text-brand-800 font-bold px-2 py-0.5 rounded">CEFR B1 Text</span>
+                        </div>
+                        <p class="text-xs leading-relaxed text-slate-700">
+                            <span class="bg-purple-100 px-1 font-semibold rounded text-purple-800">Cultural festivals</span> are special occasions that showcase the unique traditions, food, and arts of a region. Every year, thousands of visitors attend these remarkable events.
+                        </p>
+                        <p class="text-xs leading-relaxed text-slate-700">
+                            During these celebrations, various <span class="bg-emerald-100 px-1 font-semibold rounded text-emerald-800">people</span> work together. Local <span class="bg-emerald-100 px-1 font-semibold text-emerald-800">artists</span> present music, while talented <span class="bg-emerald-100 px-1 font-semibold text-emerald-800">chefs</span> cook authentic dishes. Friendly <span class="bg-emerald-100 px-1 font-semibold text-emerald-800">volunteers</span> help visitors around the <span class="bg-amber-100 px-1 font-semibold text-amber-800">venue</span>.
+                        </p>
+                        <p class="text-xs leading-relaxed text-slate-700">
+                            The <span class="bg-amber-100 px-1 font-semibold rounded text-amber-800">places</span> chosen are often historic <span class="bg-amber-100 px-1 font-semibold text-amber-800">city parks</span> or <span class="bg-amber-100 px-1 font-semibold text-amber-800">town squares</span>. Market booths sell handmade <span class="bg-blue-100 px-1 font-semibold text-blue-800">crafts</span>, traditional <span class="bg-blue-100 px-1 font-semibold text-blue-800">costumes</span>, and <span class="bg-blue-100 px-1 font-semibold text-blue-800">smartphones</span> capture photos.
+                        </p>
+                    </div>
+                `
+            },
+            {
+                title: "Slide 9: Vocational Context Analysis",
+                subtitle: "Applying Classification in Vocational Workplaces",
+                content: `
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-2xl border border-slate-200 space-y-2">
+                            <h4 class="font-bold text-slate-800 text-xs uppercase text-brand-700">Industrial / Workplace Example</h4>
+                            <p class="text-xs text-slate-600">
+                                In an engineering workshop:
+                            </p>
+                            <ul class="text-xs text-slate-700 space-y-1 list-disc list-inside">
+                                <li><strong>Person:</strong> A technician <span class="text-brand-600 font-bold">who</span> repairs machinery.</li>
+                                <li><strong>Thing:</strong> A multimeter <span class="text-brand-600 font-bold">which</span> measures voltage.</li>
+                                <li><strong>Place:</strong> A factory <span class="text-brand-600 font-bold">where</span> products are assembled.</li>
+                                <li><strong>Event:</strong> Maintenance day <span class="text-brand-600 font-bold">when</span> machines are inspected.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-emerald-900 text-white p-5 rounded-2xl flex flex-col justify-center space-y-2">
+                            <i class="fa-solid fa-lightbulb text-amber-300 text-2xl"></i>
+                            <h4 class="font-bold text-sm">Key Takeaway for Vocational English</h4>
+                            <p class="text-xs text-brand-100 leading-relaxed">
+                                Klasifikasi memudahkan penulisan standard operating procedures (SOP), job descriptions, dan inventaris barang di tempat kerja!
+                            </p>
+                        </div>
+                    </div>
+                `
+            },
+            {
+                title: "Slide 10: Summary & Quick Checklist",
+                subtitle: "Summary of Categories & Relative Pronouns",
+                content: `
+                    <div class="space-y-3">
+                        <div class="grid grid-cols-4 gap-2 text-center text-xs">
+                            <div class="bg-emerald-100 text-emerald-900 p-2.5 rounded-xl font-bold">PEOPLE<br><span class="text-[10px] font-normal">WHO</span></div>
+                            <div class="bg-blue-100 text-blue-900 p-2.5 rounded-xl font-bold">THINGS<br><span class="text-[10px] font-normal">WHICH / THAT</span></div>
+                            <div class="bg-amber-100 text-amber-900 p-2.5 rounded-xl font-bold">PLACES<br><span class="text-[10px] font-normal">WHERE</span></div>
+                            <div class="bg-purple-100 text-purple-900 p-2.5 rounded-xl font-bold">EVENTS<br><span class="text-[10px] font-normal">WHEN</span></div>
+                        </div>
+
+                        <div class="bg-white p-4 rounded-2xl border border-brand-200 text-xs text-slate-700 space-y-2">
+                            <p class="font-bold text-brand-800">Quick Recap Checklist:</p>
+                            <p>✔️ Person + <strong>WHO</strong> + action verb</p>
+                            <p>✔️ Thing + <strong>WHICH</strong> + description/action</p>
+                            <p>✔️ Place + <strong>WHERE</strong> + location activity</p>
+                            <p>✔️ Event + <strong>WHEN</strong> + scheduled time</p>
+                        </div>
+                    </div>
+                `
+            }
+        ];
+
+        function renderSlide() {
+            const container = document.getElementById('slide-container');
+            const data = slidesData[currentSlide];
+
+            container.innerHTML = `
+                <div class="space-y-4 max-w-4xl mx-auto">
+                    <div>
+                        <span class="text-xs font-bold text-brand-600 uppercase tracking-wider">${data.subtitle}</span>
+                        <h2 class="text-2xl font-black text-slate-800">${data.title}</h2>
+                    </div>
+                    ${data.content}
+                </div>
+            `;
+
+            document.getElementById('slide-indicator').innerText = `Slide ${currentSlide + 1} / ${slidesData.length}`;
+            document.getElementById('slide-progress-bar').style.width = `${((currentSlide + 1) / slidesData.length) * 100}%`;
+
+            // Render dots
+            const dotsContainer = document.getElementById('slide-dots');
+            dotsContainer.innerHTML = '';
+            slidesData.forEach((_, idx) => {
+                const dot = document.createElement('div');
+                dot.className = `w-2 h-2 rounded-full transition-all ${idx === currentSlide ? 'bg-brand-600 w-5' : 'bg-slate-300'}`;
+                dotsContainer.appendChild(dot);
+            });
+
+            // Update Nav Buttons State
+            document.getElementById('btn-prev-slide').disabled = currentSlide === 0;
+            document.getElementById('btn-prev-slide').style.opacity = currentSlide === 0 ? '0.5' : '1';
+        }
+
+        function changeSlide(direction) {
+            playSound('click');
+            currentSlide += direction;
+            if (currentSlide < 0) currentSlide = 0;
+            if (currentSlide >= slidesData.length) currentSlide = slidesData.length - 1;
+            renderSlide();
+        }
+
+        /* ==========================================================================
+           5. SIMULATION / MINI-GAME LOGIC
+           ========================================================================== */
+        const simCardsData = [
+            { text: "Chefs", category: "PEOPLE" },
+            { text: "Smartphones", category: "THINGS" },
+            { text: "Town Square", category: "PLACES" },
+            { text: "Festival", category: "EVENTS" },
+            { text: "Artisans", category: "PEOPLE" },
+            { text: "Crafts", category: "THINGS" },
+            { text: "Museum", category: "PLACES" },
+            { text: "Exhibition", category: "EVENTS" }
+        ];
+
+        let selectedSimCard = null;
+        let simUserAssignments = {};
+
+        function initSimulation() {
+            const bank = document.getElementById('sim-word-bank');
+            bank.innerHTML = '';
+
+            // Clear bins
+            ['PEOPLE', 'THINGS', 'PLACES', 'EVENTS'].forEach(cat => {
+                document.getElementById(`bin-${cat}`).innerHTML = '';
+            });
+
+            simCardsData.forEach((item, index) => {
+                const card = document.createElement('button');
+                card.id = `sim-card-${index}`;
+                card.className = "sim-card bg-white px-3 py-1.5 rounded-xl border border-slate-300 text-xs font-semibold hover:border-brand-500 shadow-sm transition";
+                card.innerText = item.text;
+                card.onclick = () => selectSimCard(index, item.text);
+                bank.appendChild(card);
+            });
+
+            simUserAssignments = {};
+            document.getElementById('sim-score-feedback').innerText = '';
+        }
+
+        function selectSimCard(index, text) {
+            playSound('click');
+            selectedSimCard = { index, text };
+            
+            // Highlight selected card
+            document.querySelectorAll('.sim-card').forEach(c => c.classList.remove('ring-2', 'ring-brand-500', 'bg-brand-50'));
+            const cardEl = document.getElementById(`sim-card-${index}`);
+            if (cardEl) cardEl.classList.add('ring-2', 'ring-brand-500', 'bg-brand-50');
+        }
+
+        function dropSimCard(targetCategory) {
+            if (!selectedSimCard) return;
+            playSound('click');
+
+            const { index, text } = selectedSimCard;
+            simUserAssignments[index] = targetCategory;
+
+            // Move card visual element to target bin
+            const bin = document.getElementById(`bin-${targetCategory}`);
+            const cardEl = document.getElementById(`sim-card-${index}`);
+            if (cardEl) {
+                cardEl.classList.remove('ring-2', 'ring-brand-500', 'bg-brand-50');
+                bin.appendChild(cardEl);
+            }
+
+            selectedSimCard = null;
+        }
+
+        function checkSimulation() {
+            let correct = 0;
+            simCardsData.forEach((item, index) => {
+                if (simUserAssignments[index] === item.category) {
+                    correct++;
+                }
+            });
+
+            const feedback = document.getElementById('sim-score-feedback');
+            if (correct === simCardsData.length) {
+                playSound('correct');
+                feedback.innerHTML = `<span class="text-brand-700">Perfect! ${correct}/${simCardsData.length} Kategori Tepat!</span>`;
+            } else {
+                playSound('error');
+                feedback.innerHTML = `<span class="text-amber-700">Skor: ${correct}/${simCardsData.length}. Coba sesuaikan lagi card sorting Anda.</span>`;
+            }
+        }
+
+        function resetSimulation() {
+            playSound('click');
+            initSimulation();
+        }
+
+        /* ==========================================================================
+           6. EVALUATION QUIZ DATA & ENGINE (10 Interactive Multi-Type Questions)
+           ========================================================================== */
+        const quizQuestions = [
+            {
+                id: 1,
+                type: "mcq",
+                question: "Manakah di bawah ini yang seluruh kata-katanya diklasifikasikan ke dalam kategori 'PEOPLE'?",
+                options: [
+                    "A. Chef, Artisan, Volunteer",
+                    "B. Smartphone, Craft, Camera",
+                    "C. Museum, Town Square, Park",
+                    "D. Festival, Concert, Ceremony",
+                    "E. Chef, Souvenir, Museum"
+                ],
+                correct: 0,
+                explanation: "Option A (Chef, Artisan, Volunteer) adalah kelompok individu/profesi yang semuanya termasuk dalam kategori PEOPLE."
+            },
+            {
+                id: 2,
+                type: "mcq",
+                question: "Pilihlah Relative Pronoun yang tepat untuk kalimat: 'A doctor is a person _____ helps sick people.'",
+                options: [
+                    "A. which",
+                    "B. where",
+                    "C. who",
+                    "D. when",
+                    "E. whose"
+                ],
+                correct: 2,
+                explanation: "Relative Pronoun 'WHO' digunakan secara khusus untuk menjelaskan Noun berjenis PEOPLE (doctor)."
+            },
+            {
+                id: 3,
+                type: "fill",
+                question: "Lengkapilah isian rumpang berikut (Ketik huruf kecil): 'A museum is a place _____ historical items are displayed.'",
+                correct: "where",
+                explanation: "Tempat ('A museum / a place') dihubungkan menggunakan Relative Pronoun 'where'."
+            },
+            {
+                id: 4,
+                type: "dropdown",
+                question: "Pilihlah kata berjenis 'EVENTS' dari opsi dropdown untuk melengkapi kalimat berikut:",
+                sentencePrefix: "Every year, people attend the cultural ",
+                options: ["monument", "festival", "artisan", "smartphone"],
+                correct: "festival",
+                explanation: "'Festival' merupakan contoh Noun kategori EVENTS (kejadian/perayaan)."
+            },
+            {
+                id: 5,
+                type: "checkbox",
+                question: "Pilihlah SEMUA item di bawah ini yang termasuk dalam kategori 'THINGS' (Benda/Alat):",
+                options: [
+                    { text: "Handmade craft", isCorrect: true },
+                    { text: "Digital camera", isCorrect: true },
+                    { text: "Local chef", isCorrect: false },
+                    { text: "Town square", isCorrect: false }
+                ],
+                explanation: "'Handmade craft' dan 'Digital camera' adalah benda mati (THINGS), sedangkan chef adalah People dan town square adalah Place."
+            },
+            {
+                id: 6,
+                type: "mcq",
+                question: "Kalimat manakah yang menggunakan Relative Pronoun 'WHICH' secara tepat?",
+                options: [
+                    "A. A smartphone is a device which connects to the internet.",
+                    "B. A technician is a person which repairs computers.",
+                    "C. A park is a place which children play.",
+                    "D. Festival is an event which people celebrate.",
+                    "E. A doctor is a person which gives medicine."
+                ],
+                correct: 0,
+                explanation: "Option A tepat karena 'smartphone / device' adalah THINGS yang dihubungkan dengan 'which'."
+            },
+            {
+                id: 7,
+                type: "matching",
+                question: "Cocokkan Kategori di sebelah kiri dengan Contoh Noun yang tepat di sebelah kanan:",
+                pairs: [
+                    { category: "PEOPLE", item: "Volunteer" },
+                    { category: "THINGS", item: "Souvenir" },
+                    { category: "PLACES", item: "Workshop" },
+                    { category: "EVENTS", item: "Exhibition" }
+                ],
+                explanation: "Matching: People-Volunteer, Things-Souvenir, Places-Workshop, Events-Exhibition."
+            },
+            {
+                id: 8,
+                type: "mcq",
+                question: "Berdasarkan teks 'Cultural Festivals', apakah fungsi dari 'friendly volunteers'?",
+                options: [
+                    "A. Cooking authentic dishes for visitors",
+                    "B. Helping visitors navigate the venue and answering questions",
+                    "C. Selling handmade crafts in market booths",
+                    "D. Presenting traditional dances on stage",
+                    "E. Taking photos with digital cameras"
+                ],
+                correct: 1,
+                explanation: "Sesuai paragraf 2 teks bacaan: 'Friendly volunteers ... helping visitors navigate the venue and answering their questions.'"
+            },
+            {
+                id: 9,
+                type: "dropdown",
+                question: "Pilihlah Relative Pronoun yang tepat untuk waktu/event:",
+                sentencePrefix: "New Year's Eve is an occasion ",
+                options: ["who", "where", "when", "which"],
+                sentenceSuffix: " people celebrate the start of a year.",
+                correct: "when",
+                explanation: "Relative Pronoun 'WHEN' digunakan untuk menerangkan waktu atau peristiwa (EVENTS)."
+            },
+            {
+                id: 10,
+                type: "mcq",
+                question: "Kata sifat (Adjectives) manakah yang paling cocok untuk mendeskripsikan kategori 'PLACES' industri SMK?",
+                options: [
+                    "A. Spacious & Historic",
+                    "B. Polite & Skilled",
+                    "C. Fragile & Durable",
+                    "D. Annual & Memorable",
+                    "E. Energetic & Kind"
+                ],
+                correct: 0,
+                explanation: "'Spacious' (luas) dan 'Historic' (bersejarah) adalah kata sifat deskriptif untuk tempat/lokasi (PLACES)."
+            }
+        ];
+
+        let currentQuestionIdx = 0;
+
+        function renderQuestion() {
+            const container = document.getElementById('quiz-body');
+            const q = quizQuestions[currentQuestionIdx];
+            document.getElementById('quiz-num-display').innerText = currentQuestionIdx + 1;
+
+            let html = `
+                <div class="space-y-4 max-w-3xl mx-auto bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
+                    <span class="text-[10px] font-extrabold uppercase px-2.5 py-1 bg-amber-100 text-amber-900 rounded-full">
+                        Tipe Soal: ${q.type.toUpperCase()}
+                    </span>
+                    <h3 class="text-base md:text-lg font-bold text-slate-800 leading-snug">${q.question}</h3>
+            `;
+
+            // Type 1: MCQ (5 Options A-E)
+            if (q.type === 'mcq') {
+                html += `<div class="space-y-2 pt-2">`;
+                q.options.forEach((opt, idx) => {
+                    const checked = userQuizAnswers[q.id] === idx ? 'checked' : '';
+                    html += `
+                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                            <input type="radio" name="quiz-opt" value="${idx}" ${checked} onchange="saveAnswer(${q.id}, ${idx})" class="w-4 h-4 text-brand-600 focus:ring-brand-500">
+                            <span class="text-xs text-slate-700 font-medium">${opt}</span>
+                        </label>
+                    `;
+                });
+                html += `</div>`;
+            }
+
+            // Type 2: Fill-in-the-blank Text Input
+            else if (q.type === 'fill') {
+                const val = userQuizAnswers[q.id] || '';
+                html += `
+                    <div class="pt-2">
+                        <input type="text" value="${val}" onchange="saveAnswer(${q.id}, this.value.trim().toLowerCase())" placeholder="Ketik jawaban Anda di sini..." class="w-full p-3 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-amber-500 focus:outline-none">
+                    </div>
+                `;
+            }
+
+            // Type 3: Rumpang Dropdown
+            else if (q.type === 'dropdown') {
+                const val = userQuizAnswers[q.id] || '';
+                html += `
+                    <div class="pt-2 flex flex-wrap items-center gap-2 text-xs text-slate-700 font-medium">
+                        <span>${q.sentencePrefix || ''}</span>
+                        <select onchange="saveAnswer(${q.id}, this.value)" class="p-2.5 rounded-xl border border-slate-300 font-bold text-brand-700 focus:ring-2 focus:ring-amber-500">
+                            <option value="">-- Pilih Jawaban --</option>
+                            ${q.options.map(opt => `<option value="${opt}" ${val === opt ? 'selected' : ''}>${opt}</option>`).join('')}
+                        </select>
+                        <span>${q.sentenceSuffix || ''}</span>
+                    </div>
+                `;
+            }
+
+            // Type 4: Checkbox Multi-Select
+            else if (q.type === 'checkbox') {
+                const selectedArr = userQuizAnswers[q.id] || [];
+                html += `<div class="space-y-2 pt-2">`;
+                q.options.forEach((opt, idx) => {
+                    const checked = selectedArr.includes(idx) ? 'checked' : '';
+                    html += `
+                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-200 hover:bg-slate-50 cursor-pointer transition">
+                            <input type="checkbox" ${checked} onchange="toggleCheckboxAnswer(${q.id}, ${idx})" class="w-4 h-4 rounded text-brand-600 focus:ring-brand-500">
+                            <span class="text-xs text-slate-700 font-medium">${opt.text}</span>
+                        </label>
+                    `;
+                });
+                html += `</div>`;
+            }
+
+            // Type 5: Drag & Drop Matching (Static Selector fallback for robust mobile)
+            else if (q.type === 'matching') {
+                const matches = userQuizAnswers[q.id] || {};
+                html += `<div class="grid gap-2 pt-2">`;
+                q.pairs.forEach((pair, idx) => {
+                    const val = matches[pair.category] || '';
+                    html += `
+                        <div class="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl border border-slate-200 text-xs">
+                            <span class="font-bold text-brand-800">${pair.category}</span>
+                            <i class="fa-solid fa-arrow-right text-slate-400"></i>
+                            <select onchange="saveMatchingAnswer(${q.id}, '${pair.category}', this.value)" class="p-1.5 rounded-lg border border-slate-300 font-semibold text-slate-700">
+                                <option value="">-- Pilih Match --</option>
+                                ${q.pairs.map(p => `<option value="${p.item}" ${val === p.item ? 'selected' : ''}>${p.item}</option>`).join('')}
+                            </select>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            }
+
+            html += `</div>`;
+            container.innerHTML = html;
+
+            // Nav controls
+            document.getElementById('btn-quiz-prev').style.visibility = currentQuestionIdx === 0 ? 'hidden' : 'visible';
+            if (currentQuestionIdx === quizQuestions.length - 1) {
+                document.getElementById('btn-quiz-next').classList.add('hidden');
+                document.getElementById('btn-quiz-submit').classList.remove('hidden');
+            } else {
+                document.getElementById('btn-quiz-next').classList.remove('hidden');
+                document.getElementById('btn-quiz-submit').classList.add('hidden');
+            }
+        }
+
+        function saveAnswer(qId, val) {
+            playSound('click');
+            userQuizAnswers[qId] = val;
+        }
+
+        function toggleCheckboxAnswer(qId, idx) {
+            playSound('click');
+            if (!userQuizAnswers[qId]) userQuizAnswers[qId] = [];
+            const arr = userQuizAnswers[qId];
+            const pos = arr.indexOf(idx);
+            if (pos > -1) arr.splice(pos, 1);
+            else arr.push(idx);
+        }
+
+        function saveMatchingAnswer(qId, category, selectedItem) {
+            playSound('click');
+            if (!userQuizAnswers[qId]) userQuizAnswers[qId] = {};
+            userQuizAnswers[qId][category] = selectedItem;
+        }
+
+        function nextQuestion() {
+            playSound('click');
+            if (currentQuestionIdx < quizQuestions.length - 1) {
+                currentQuestionIdx++;
+                renderQuestion();
+            }
+        }
+
+        function prevQuestion() {
+            playSound('click');
+            if (currentQuestionIdx > 0) {
+                currentQuestionIdx--;
+                renderQuestion();
+            }
+        }
+
+        /* ==========================================================================
+           7. QUIZ EVALUATION & AUTOMATIC EXPLANATION GENERATOR
+           ========================================================================== */
+        function submitQuiz() {
+            playSound('click');
+            let totalCorrect = 0;
+
+            quizQuestions.forEach(q => {
+                const ans = userQuizAnswers[q.id];
+
+                if (q.type === 'mcq' && ans === q.correct) totalCorrect++;
+                else if (q.type === 'fill' && ans === q.correct) totalCorrect++;
+                else if (q.type === 'dropdown' && ans === q.correct) totalCorrect++;
+                else if (q.type === 'checkbox') {
+                    const correctIndices = q.options.map((o, i) => o.isCorrect ? i : null).filter(i => i !== null);
+                    const userIndices = ans || [];
+                    if (JSON.stringify(correctIndices.sort()) === JSON.stringify(userIndices.sort())) {
+                        totalCorrect++;
+                    }
+                } else if (q.type === 'matching') {
+                    let allMatched = true;
+                    q.pairs.forEach(p => {
+                        if (!ans || ans[p.category] !== p.item) allMatched = false;
+                    });
+                    if (allMatched) totalCorrect++;
+                }
+            });
+
+            quizScore = Math.round((totalCorrect / quizQuestions.length) * 100);
+            isQuizPassed = quizScore >= 70;
+
+            // Render Results Header
+            document.getElementById('final-score-val').innerText = quizScore;
+            
+            let predicate = 'C';
+            if (quizScore >= 90) predicate = 'A (Excellent)';
+            else if (quizScore >= 80) predicate = 'B (Very Good)';
+            else if (quizScore >= 70) predicate = 'C (Good)';
+            else predicate = 'D (Need Practice)';
+
+            document.getElementById('final-predicate-val').innerText = predicate;
+
+            const statusText = document.getElementById('result-status-text');
+            if (isQuizPassed) {
+                statusText.innerText = "Selamat! Anda telah LULUS kuis evaluasi ini. Sertifikat Anda sudah terbuka!";
+                document.getElementById('btn-cert-from-result').classList.remove('hidden');
+                unlockCertificateTile();
+            } else {
+                statusText.innerText = "Nilai Anda belum memenuhi batas kelulusan (Min. 70). Silahkan pelajari materi dan coba lagi.";
+                document.getElementById('btn-cert-from-result').classList.add('hidden');
+            }
+
+            // Render Automatic Explanation List
+            const expList = document.getElementById('quiz-explanation-list');
+            expList.innerHTML = '';
+            quizQuestions.forEach((q, idx) => {
+                const item = document.createElement('div');
+                item.className = "bg-slate-50 p-3 rounded-xl border border-slate-200 text-xs space-y-1";
+                item.innerHTML = `
+                    <div class="font-bold text-slate-800">Soal ${idx + 1}: ${q.question}</div>
+                    <div class="text-brand-700 font-semibold">💡 Pembahasan: ${q.explanation}</div>
+                `;
+                expList.appendChild(item);
+            });
+
+            navigateTo('screen-quiz-result');
+        }
+
+        function unlockCertificateTile() {
+            const badge = document.getElementById('cert-lock-badge');
+            if (badge) {
+                badge.className = "inline-flex items-center space-x-1 bg-amber-400 text-slate-950 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wider";
+                badge.innerHTML = `<i class="fa-solid fa-lock-open mr-1"></i> Terbuka (Lulus)`;
+            }
+        }
+
+        /* ==========================================================================
+           8. CERTIFICATE GENERATION & PRINT
+           ========================================================================== */
+        function openCertificateScreen() {
+            if (!isQuizPassed) {
+                playSound('error');
+                alert("Sertifikat masih terkunci. Anda harus menyelesaikan Kuis Evaluasi dengan skor minimal 70 untuk membuka Sertifikat.");
+                return;
+            }
+
+            playSound('correct');
+
+            // Populate Certificate Data
+            document.getElementById('cert-student-name').innerText = studentData.name;
+            document.getElementById('cert-school-name').innerText = studentData.school;
+            document.getElementById('cert-score-display').innerText = `${quizScore} / 100`;
+
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+            document.getElementById('cert-date').innerText = dateStr;
+
+            navigateTo('screen-certificate');
+        }
+
+        /* ==========================================================================
+           9. REFLECTION LOGIC
+           ========================================================================== */
+        function saveReflection() {
+            playSound('correct');
+            alert("Terima kasih! Catatan refleksi diri Anda telah berhasil disimpan dalam sesi belajar ini.");
+            navigateTo('screen-menu');
+        }
+
+        /* ==========================================================================
+           10. APP INITIALIZATION ON WINDOW LOAD
+           ========================================================================== */
+        window.onload = function() {
+            renderSlide();
+            initSimulation();
+            renderQuestion();
+        };
+    </script>
+</body>
+</html>
